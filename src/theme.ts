@@ -1,4 +1,4 @@
-import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
+import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react'
 
 const config = defineConfig({
   globalCss: {
@@ -9,6 +9,7 @@ const config = defineConfig({
     },
     body: {
       padding: '8',
+      paddingBottom: '48',
     },
   },
   theme: {
@@ -55,6 +56,6 @@ const config = defineConfig({
       },
     },
   },
-});
+})
 
-export default createSystem(defaultConfig, config);
+export default createSystem(defaultConfig, config)

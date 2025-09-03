@@ -1,44 +1,48 @@
 import {
   Box,
+  Heading,
+  Skeleton,
+  SimpleGrid,
+  Button,
+  Card,
+  For,
+  Image,
   Center,
   Flex,
-  Heading,
+  Badge,
   Highlight,
-  SimpleGrid,
-  Card,
-  Image,
-  Button,
-  Skeleton,
   Text,
-  For,
 } from '@chakra-ui/react'
-import { GiKnifeFork } from 'react-icons/gi'
-import { HiMiniArrowRight } from 'react-icons/hi2'
+import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
-
+import { HiMiniArrowRight } from 'react-icons/hi2'
+import { GiKnifeFork } from 'react-icons/gi'
 import { FloatingBackButton } from '@/components/navigation/FloatingBackButton'
 
-import type { categoryType } from '@/lib/types'
+import type { mealType } from '@/lib/types'
 
-export function MealCategories() {
+export const FilterMealsByCategory = () => {
+  const params = useParams()
+
   const { isPending, data, error, isError } = useQuery({
-    queryKey: ['allCategories'],
+    queryKey: ['mealsByCategory', { c: params.c }],
     queryFn: async () => {
-      const res = await fetch(`/api/mealCategories`)
+      const fetchString = `/api/filterMealsByCategory?c=${params.c}`
+      const res = await fetch(fetchString)
       return await res.json()
     },
   })
 
   if (error || isError || data?.error) {
+    console.log(data?.error, isError, error?.message, error?.name, error?.cause)
     return (
       <Box gap={'5'}>
         <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
-          Failed to load meal categories...
+          Failed to load meals by category...
         </Heading>
         <MealCategoryGridItemsSkeleton />
 
-        <FloatingBackButton title='Back Home' url='/' />
+        <FloatingBackButton title='Back to Categories' url='/mealCategories' />
       </Box>
     )
   }
@@ -46,13 +50,17 @@ export function MealCategories() {
   return (
     <Box mt={'8'} gap={'10'}>
       {/* heading */}
-      <Center mb={'10'}>
+      <Center mb={'12'}>
         <Heading as={'h1'} fontSize={{ base: '2xl', md: '5xl' }}>
-          <Flex alignItems={'center'} gap={'1'} color={'appColor'}>
-            <GiKnifeFork style={{ marginRight: '0.5em' }} />
-            <Highlight query={'Meal'} styles={{ color: 'ButtonText' }}>
-              Meal Categories
+          <Flex alignItems={'center'} color={'appColor'} gap={'2'}>
+            <Highlight query={'Meals,'} styles={{ color: 'ButtonText' }}>
+              Meals,
             </Highlight>
+
+            <Text>
+              {'by '}
+              {params.c || ''}
+            </Text>
           </Flex>
         </Heading>
       </Center>
@@ -60,20 +68,20 @@ export function MealCategories() {
       {isPending ? (
         <MealCategoryGridItemsSkeleton />
       ) : (
-        <SimpleGrid columns={[1, 2, 2, 3, 3, 4]} gap={'4'}>
-          <For each={data.categories || []}>
-            {(item: categoryType, index: number) => (
+        <SimpleGrid columns={[1, 1, 2, 3, 3, 4]} gap={'4'}>
+          <For each={data.meals || []}>
+            {(item: mealType, index: number) => (
               <MealCategoryGridItem
                 item={item}
                 index={index}
-                key={`${index}-${item.idCategory}`}
+                key={`${index}-${item.idMeal}`}
               />
             )}
           </For>
         </SimpleGrid>
       )}
 
-      <FloatingBackButton title='Back Home' url='/' />
+      <FloatingBackButton title='Back to Categories' url='/mealCategories' />
     </Box>
   )
 }
@@ -82,35 +90,33 @@ const MealCategoryGridItem = ({
   index,
   item,
 }: {
-  item: categoryType
+  item: mealType
   index: number
 }) => {
+  const params = useParams()
+
   return (
-    <Link to={`/mealCategories/${item.strCategory}`}>
-      <Card.Root
-        cursor={'pointer'}
-        overflow='hidden'
-        key={`${index}-${item.idCategory}`}
-        _hover={{ shadow: 'lg' }}
-      >
-        <Image
-          src={item.strCategoryThumb}
-          alt={`${item.strCategory}-image`}
-          pb={0}
-        />
-        <Card.Body gap='2'>
-          <Card.Title>{item.strCategory}</Card.Title>
-          <Card.Description>
-            <Text truncate>{item.strCategoryDescription}</Text>
-          </Card.Description>
-        </Card.Body>
-        <Card.Footer gap='2' justifyContent={'flex-end'}>
-          <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
-            <HiMiniArrowRight />
-          </Button>
-        </Card.Footer>
-      </Card.Root>
-    </Link>
+    <Card.Root
+      cursor={'pointer'}
+      overflow='hidden'
+      key={`${index}-${item.idMeal}`}
+      _hover={{ shadow: 'lg' }}
+    >
+      <Image src={item.strMealThumb} alt={`${item.strMeal}-image`} pb={0} />
+      <Card.Body gap='2'>
+        <Card.Title>{item.strMeal}</Card.Title>
+      </Card.Body>
+      <Card.Footer gap='2' justifyContent={'space-between'}>
+        <Badge variant={'solid'} color={'appColor'} size={'md'}>
+          <GiKnifeFork />
+          {params.c}
+        </Badge>
+
+        <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
+          <HiMiniArrowRight />
+        </Button>
+      </Card.Footer>
+    </Card.Root>
   )
 }
 
