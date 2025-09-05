@@ -11,8 +11,7 @@ import {
 } from '@chakra-ui/react'
 import { RiBarChartHorizontalLine } from 'react-icons/ri'
 import { GrHomeRounded } from 'react-icons/gr'
-import { GiKnifeFork } from 'react-icons/gi'
-import { TbCategory } from 'react-icons/tb'
+import { MdOutlineFastfood } from 'react-icons/md'
 
 import { Logo } from '../Logo'
 
@@ -27,13 +26,7 @@ export function NavDrawer() {
           <DrawerButton
             title='Meal Categories'
             url='/mealCategories'
-            icon={<GiKnifeFork />}
-          />
-
-          <DrawerButton
-            title='Categories'
-            url='/categories'
-            icon={<TbCategory />}
+            icon={<MdOutlineFastfood />}
           />
         </Stack>
       </Drawer.Body>

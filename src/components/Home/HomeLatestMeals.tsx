@@ -13,28 +13,26 @@ import {
 } from '@chakra-ui/react'
 import { HiMiniArrowRight } from 'react-icons/hi2'
 import type { ReactNode } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 
+// utilities...
 import type { mealType } from '@/lib/types'
+import { useFetchData } from '@/hooks/useFetchData'
+
+// components...
+import { FetchErrorView } from '../FetchErrorView'
 
 export function HomeLatestMeals() {
-  const { isPending, data, error, isError } = useQuery({
-    queryKey: ['latestMealsByCategory'],
-    queryFn: async () => {
-      const res = await fetch(`/api/latestMeals`)
-      return await res.json()
-    },
+  const { isPending, data, error, isError } = useFetchData({
+    queryKey: 'latestMealsByCategory',
+    endpoint: '/api/latestMeals',
   })
 
   if (error || isError || data?.error) {
     return (
-      <Box gap={'5'}>
-        <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
-          Failed to load latest meals...
-        </Heading>
+      <FetchErrorView headingText='Failed to load latest meals...'>
         <MealCategoriesSkeleton />
-      </Box>
+      </FetchErrorView>
     )
   }
 

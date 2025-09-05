@@ -9,33 +9,30 @@ import {
   Image,
   Button,
   Skeleton,
-  IconButton, Highlight,
+  IconButton,
+  Highlight,
 } from '@chakra-ui/react'
 import { HiMiniArrowRight } from 'react-icons/hi2'
 import type { ReactNode } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { MdNavigateNext } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
 import type { categoryType } from '@/lib/types'
+import { useFetchData } from '@/hooks/useFetchData'
+
+import { FetchErrorView } from '../FetchErrorView'
 
 export function HomeMealCategories() {
-  const { isPending, data, error, isError } = useQuery({
-    queryKey: ['allCategories'],
-    queryFn: async () => {
-      const res = await fetch(`/api/mealCategories`)
-      return await res.json()
-    },
+  const { isPending, data, error, isError } = useFetchData({
+    queryKey: 'allCategories',
+    endpoint: '/api/mealCategories',
   })
 
   if (error || isError || data?.error) {
     return (
-      <Box gap={'5'}>
-        <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
-          Failed to load meal categories...
-        </Heading>
+      <FetchErrorView headingText='Failed to load meal categories...'>
         <MealCategoriesSkeleton />
-      </Box>
+      </FetchErrorView>
     )
   }
 
@@ -44,7 +41,9 @@ export function HomeMealCategories() {
       <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'}>
         <Flex alignItems={'center'} gap={'4'}>
           <Box>
-            <Highlight query={'Meal'} styles={{ color: 'appColor' }}>Meal Categories</Highlight>
+            <Highlight query={'Meal'} styles={{ color: 'appColor' }}>
+              Meal Categories
+            </Highlight>
           </Box>
 
           <Link to={'/mealCategories'}>
@@ -82,9 +81,9 @@ export function HomeMealCategories() {
 }
 
 const MealCategoryItem = ({
-                            index,
-                            item,
-                          }: {
+  index,
+  item,
+}: {
   item: categoryType
   index: number
 }) => {
@@ -92,9 +91,9 @@ const MealCategoryItem = ({
     <Link to={`/mealCategories/${item.strCategory}`}>
       <Card.Root
         cursor={'pointer'}
-        overflow="hidden"
-        maxW="xs"
-        minW="xs"
+        overflow='hidden'
+        maxW='xs'
+        minW='xs'
         flexShrink={0}
         key={`${index}-${item.idCategory}`}
         _hover={{ shadow: 'lg' }}
@@ -104,14 +103,14 @@ const MealCategoryItem = ({
           alt={`${item.strCategory}-image`}
           pb={0}
         />
-        <Card.Body gap="2">
+        <Card.Body gap='2'>
           <Card.Title>{item.strCategory}</Card.Title>
           <Card.Description>
             <Text truncate>{item.strCategoryDescription}</Text>
           </Card.Description>
         </Card.Body>
-        <Card.Footer gap="2" justifyContent={'flex-end'}>
-          <Button variant="outline" _hover={{ bg: 'appColorShade.100' }}>
+        <Card.Footer gap='2' justifyContent={'flex-end'}>
+          <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
             <HiMiniArrowRight />
           </Button>
         </Card.Footer>
@@ -134,9 +133,9 @@ const MealCategoriesSkeleton = () => {
 
 const MealCategoryItemSkeleton = () => {
   return (
-    <Card.Root maxW="xs" overflow={'hidden'}>
+    <Card.Root maxW='xs' overflow={'hidden'}>
       <Skeleton width={'72'} height={'60'} />
-      <Card.Body gap="2">
+      <Card.Body gap='2'>
         <Card.Title>
           <Skeleton height={'5'} width={'100px'} />
         </Card.Title>
@@ -144,8 +143,8 @@ const MealCategoryItemSkeleton = () => {
           <Skeleton height={'5'} width={'80%'} />
         </Card.Description>
       </Card.Body>
-      <Card.Footer gap="2" justifyContent={'flex-end'}>
-        <Button variant="outline">
+      <Card.Footer gap='2' justifyContent={'flex-end'}>
+        <Button variant='outline'>
           <Skeleton height={'2'} width={'4'} />
         </Button>
       </Card.Footer>
@@ -157,13 +156,13 @@ function HorizontalScrollArea({ children }: { children: ReactNode }) {
   return (
     <ScrollArea.Root>
       <ScrollArea.Viewport>
-        <ScrollArea.Content py="4">
-          <Flex gap="4" flexWrap="nowrap">
+        <ScrollArea.Content py='4'>
+          <Flex gap='4' flexWrap='nowrap'>
             {children}
           </Flex>
         </ScrollArea.Content>
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar orientation="horizontal" hidden />
+      <ScrollArea.Scrollbar orientation='horizontal' hidden />
       <ScrollArea.Corner />
     </ScrollArea.Root>
   )
