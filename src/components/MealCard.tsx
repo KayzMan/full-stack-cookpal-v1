@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
-import { Card, Image, Button, Text } from '@chakra-ui/react'
+import { Card, Image, Button, Text, Spacer } from '@chakra-ui/react'
 import { HiMiniArrowRight } from 'react-icons/hi2'
+import type { ReactNode } from 'react'
 
 import type { categoryType, mealType } from '@/lib/types'
 
@@ -12,6 +13,9 @@ type ItemType =
 interface MealCardProps {
   item: ItemType
   index: number
+  url?: string
+  cardFooterLeftView?: ReactNode
+  onHome?: boolean
 }
 
 const cardBodyProps = {
@@ -24,29 +28,42 @@ const cardFooterProps = {
 }
 
 const cardFooterButtonProps = {
-  _hover: { bg: 'appColorShade.100' },
+  _hover: { bg: 'appColorShade.100', color: 'white' },
 }
 
-export const MealCard = ({ item, index }: MealCardProps) => {
+export const MealCard = ({
+  item,
+  index,
+  url,
+  cardFooterLeftView,
+  onHome = false,
+}: MealCardProps) => {
   // Common props for the Card.Root component
-  const cardProps = {
-    maxW: 'xs',
-    minW: 'xs',
-    flexShrink: 0,
-    overflow: 'hidden',
-    _hover: { shadow: 'sm' },
-    key: `${index}-${item.type == 'category' ? item.idCategory : item.idMeal}`,
-  }
+  const cardProps = onHome
+    ? {
+        maxW: 'xs',
+        minW: 'xs',
+        flexShrink: 0,
+        overflow: 'hidden',
+        _hover: { shadow: 'sm' },
+      }
+    : {
+        overflow: 'hidden',
+        _hover: { shadow: 'sm' },
+      }
 
   if (item.type == 'category') {
     return (
-      <Link to={`/mealCategories/${item.strCategory}`}>
-        <Card.Root {...cardProps}>
+      <Link to={url ?? `/mealCategories/${item.strCategory}`}>
+        <Card.Root {...cardProps} key={`${index}-${item.idCategory}`}>
           <Image
+            loading='lazy'
             src={item.strCategoryThumb}
             alt={`${item.strCategory}-image`}
+            objectFit={'cover'}
             pb={0}
           />
+
           <Card.Body {...cardBodyProps}>
             <Card.Title>{item.strCategory}</Card.Title>
             <Card.Description>
@@ -65,9 +82,15 @@ export const MealCard = ({ item, index }: MealCardProps) => {
 
   if (item.type == 'meal') {
     return (
-      <Link to={`/mealCategories/${item?.strCategory}/${item?.idMeal}`}>
-        <Card.Root {...cardProps}>
-          <Image src={item.strMealThumb} alt={`${item.strMeal}-image`} pb={0} />
+      <Link to={url ?? `/mealCategories/${item?.strCategory}/${item?.idMeal}`}>
+        <Card.Root {...cardProps} key={`${index}-${item.idMeal}`}>
+          <Image
+            loading='lazy'
+            src={item.strMealThumb}
+            objectFit={'cover'}
+            alt={`${item.strMeal}-image`}
+            pb={0}
+          />
           <Card.Body {...cardBodyProps}>
             <Card.Title>
               <Text truncate>{item.strMeal}</Text>
@@ -78,7 +101,9 @@ export const MealCard = ({ item, index }: MealCardProps) => {
               </Card.Description>
             )}
           </Card.Body>
-          <Card.Footer>
+          <Card.Footer {...cardFooterProps}>
+            {cardFooterLeftView}
+            <Spacer />
             <Button {...cardFooterButtonProps} variant={'outline'}>
               <HiMiniArrowRight />
             </Button>

@@ -7,18 +7,33 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { LuArrowLeft, LuArrowUp } from 'react-icons/lu'
-import { GiMeal } from 'react-icons/gi'
+import { MdOutlineFastfood } from 'react-icons/md'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 export const FloatingBackButton = ({
   open = true,
   currentPage,
+  fallbackPath = '/',
 }: {
   open?: boolean
   currentPage: string
+  fallbackPath?: string
 }) => {
   const navigate = useNavigate()
+
+  const goBackSafely = () => {
+    // Check if the history stack has enough entries to go back.
+    // The history length includes the initial page, so a length > 1 means there's somewhere to go.
+    if (window.history.length > 1) {
+      navigate(-1)
+    } else {
+      // If there's nowhere to go back to, go to the fallback path.
+      // `replace: true` ensures this new route doesn't create a loop.
+      navigate(fallbackPath, { replace: true })
+    }
+  }
+
   const [scrollPosition, setScrollPosition] = useState(0)
   const handleScroll = () => {
     const position = window.pageYOffset
@@ -56,27 +71,28 @@ export const FloatingBackButton = ({
               borderColor={'appColor/48'}
               boxShadow={'lg'}
             >
-              <Button variant='plain' size='sm' onClick={() => navigate(-1)}>
+              <Button variant='plain' size='sm' onClick={goBackSafely}>
                 <LuArrowLeft />
                 Back
               </Button>
 
-              <ActionBar.Separator />
+              <ActionBar.Separator bg={'GrayText'} />
 
               <Flex alignItems={'center'} gap={'2'} color={'appColor'}>
-                <GiMeal style={{ flexShrink: 0 }} />
+                <MdOutlineFastfood style={{ flexShrink: 0 }} />
                 <Text lineClamp={1}>{currentPage}</Text>
               </Flex>
 
               {scrollPosition > 500 && (
                 <>
-                  <ActionBar.Separator />
+                  <ActionBar.Separator bg={'GrayText'} />
 
                   <IconButton
                     onClick={scrollToTop}
                     size={'xs'}
                     variant={'solid'}
-                    color={'white'}
+                    bg={'InfoText'}
+                    color={'Background'}
                     borderRadius={'full'}
                   >
                     <LuArrowUp />

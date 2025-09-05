@@ -13,7 +13,6 @@ import {
   Table,
   Center,
 } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import { GiMeal } from 'react-icons/gi'
 import { FaTag, FaLocationArrow, FaYoutube } from 'react-icons/fa'
@@ -22,30 +21,24 @@ import { LuShoppingCart } from 'react-icons/lu'
 import { VscReferences } from 'react-icons/vsc'
 import type { ReactNode } from 'react'
 
+import { useFetchData } from '@/hooks/useFetchData'
+
 import { FloatingBackButton } from '@/components/navigation/FloatingBackButton'
 import { ReadMoreText } from '@/components/ReadMore'
+import { FetchErrorView } from '@/components/FetchErrorView'
 
 export function SingleMeal() {
   const params = useParams()
 
-  const { isError, error, data, isPending } = useQuery({
-    queryKey: [`singleMeal`, { i: params.i }],
-    queryFn: async () => {
-      const fetchString = `/api/singleMeal?i=${params.i}`
-      const res = await fetch(fetchString)
-      return await res.json()
-    },
+  const { isError, error, data, isPending } = useFetchData({
+    queryKey: 'singleMeal',
+    endpoint: `/api/singleMeal?i=${params.i}`,
+    params: { i: params.i },
   })
 
   if (error || isError || data?.error) {
     return (
-      <Box gap={'5'}>
-        <Center>
-          <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
-            Failed to load meals by category...
-          </Heading>
-        </Center>
-
+      <FetchErrorView headingText='Failed to load meals by category...'>
         <Box mt={'8'} gap={'10'} mx={'auto'} maxW={'4xl'}>
           <HeadingSkeleton />
 
@@ -67,7 +60,7 @@ export function SingleMeal() {
         <FloatingBackButton
           currentPage={`${data?.meals?.[0]?.strMeal || 'Current Page'}`}
         />
-      </Box>
+      </FetchErrorView>
     )
   }
 
@@ -100,54 +93,7 @@ export function SingleMeal() {
           ) : (
             <>
               {/* badges */}
-              <ScrollArea.Root mx={'auto'}>
-                <ScrollArea.Viewport>
-                  <ScrollArea.Content pb='1'>
-                    <Flex gap='4' flexWrap='nowrap'>
-                      {/* area */}
-                      <Badge
-                        colorPalette={'blue'}
-                        variant={'solid'}
-                        size={{ base: 'md', md: 'lg' }}
-                      >
-                        <FaLocationArrow />
-                        {data?.meals?.[0]?.strArea}
-                      </Badge>
-
-                      {/* category */}
-                      <Badge
-                        colorPalette={'green'}
-                        variant={'solid'}
-                        size={{ base: 'md', md: 'lg' }}
-                      >
-                        <GiMeal />
-                        {data?.meals?.[0]?.strCategory}
-                      </Badge>
-
-                      {/* tags */}
-                      <For each={data?.meals?.[0]?.strTags?.split(',') || []}>
-                        {(item: string, index: number) => (
-                          <Badge
-                            key={`${index}-${item}`}
-                            bg={'appColor'}
-                            color={'white'}
-                            variant={'outline'}
-                            size={{ base: 'md', md: 'lg' }}
-                          >
-                            <FaTag />
-                            {item}
-                          </Badge>
-                        )}
-                      </For>
-                    </Flex>
-                  </ScrollArea.Content>
-                </ScrollArea.Viewport>
-                <ScrollArea.Scrollbar
-                  orientation='horizontal'
-                  visibility={'hidden'}
-                />
-                <ScrollArea.Corner />
-              </ScrollArea.Root>
+              <Badges data={data} />
 
               {/* Youtube */}
               <YouTubeCard data={data} />
@@ -193,7 +139,12 @@ const MealHeading = ({
   }
 }) => {
   return (
-    <Stack flexDirection={'column'} alignItems={'center'} gap={'0'} mb={'12'}>
+    <Center
+      mb={'12'}
+      position={{ base: 'relative', lg: 'sticky' }}
+      top={{ base: 0, lg: '6' }}
+      zIndex={{ base: 0, lg: '1000' }}
+    >
       <Heading
         as={'h1'}
         fontSize={{ base: '2xl', md: '4xl' }}
@@ -205,7 +156,7 @@ const MealHeading = ({
       >
         {data?.meals?.[0]?.strMeal}
       </Heading>
-    </Stack>
+    </Center>
   )
 }
 
@@ -399,5 +350,59 @@ const SourceCard = ({ data }: { data: { meals: { strSource: string }[] } }) => {
         </Link>
       </CardItem>
     )
+  )
+}
+
+const Badges = ({
+  data,
+}: {
+  data: { meals: { strArea: string; strCategory: string; strTags: string }[] }
+}) => {
+  return (
+    <ScrollArea.Root mx={'auto'}>
+      <ScrollArea.Viewport>
+        <ScrollArea.Content pb='1'>
+          <Flex gap='4' flexWrap='nowrap'>
+            {/* area */}
+            <Badge
+              colorPalette={'blue'}
+              variant={'solid'}
+              size={{ base: 'md', md: 'lg' }}
+            >
+              <FaLocationArrow />
+              {data?.meals?.[0]?.strArea}
+            </Badge>
+
+            {/* category */}
+            <Badge
+              colorPalette={'green'}
+              variant={'solid'}
+              size={{ base: 'md', md: 'lg' }}
+            >
+              <GiMeal />
+              {data?.meals?.[0]?.strCategory}
+            </Badge>
+
+            {/* tags */}
+            <For each={data?.meals?.[0]?.strTags?.split(',') || []}>
+              {(item: string, index: number) => (
+                <Badge
+                  key={`${index}-${item}`}
+                  bg={'appColor'}
+                  color={'white'}
+                  variant={'outline'}
+                  size={{ base: 'md', md: 'lg' }}
+                >
+                  <FaTag />
+                  {item}
+                </Badge>
+              )}
+            </For>
+          </Flex>
+        </ScrollArea.Content>
+      </ScrollArea.Viewport>
+      <ScrollArea.Scrollbar orientation='horizontal' visibility={'hidden'} />
+      <ScrollArea.Corner />
+    </ScrollArea.Root>
   )
 }

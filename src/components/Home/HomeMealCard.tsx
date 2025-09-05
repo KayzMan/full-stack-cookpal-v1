@@ -51,6 +51,7 @@ export function HomeMealCard(props: HomeMealCardProps) {
                     <MealCard
                       index={index}
                       item={{ type: 'category', ...item }}
+                      onHome={true}
                       key={`${index}-${item.idCategory}`}
                     />
                   )
@@ -63,6 +64,7 @@ export function HomeMealCard(props: HomeMealCardProps) {
                     <MealCard
                       index={index}
                       item={{ type: 'meal', ...item }}
+                      onHome={true}
                       key={`${index}-${item.idMeal}`}
                     />
                   )
