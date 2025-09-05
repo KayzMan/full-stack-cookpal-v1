@@ -9,21 +9,20 @@ import {
   Image,
   Button,
   Skeleton,
-  IconButton, Highlight,
+  Highlight,
 } from '@chakra-ui/react'
 import { HiMiniArrowRight } from 'react-icons/hi2'
 import type { ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { MdNavigateNext } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
-import type { categoryType } from '@/lib/types'
+import type { mealType } from '@/lib/types'
 
-export function HomeMealCategories() {
+export function HomeLatestMeals() {
   const { isPending, data, error, isError } = useQuery({
-    queryKey: ['allCategories'],
+    queryKey: ['latestMealsByCategory'],
     queryFn: async () => {
-      const res = await fetch(`/api/mealCategories`)
+      const res = await fetch(`/api/latestMeals`)
       return await res.json()
     },
   })
@@ -32,7 +31,7 @@ export function HomeMealCategories() {
     return (
       <Box gap={'5'}>
         <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
-          Failed to load meal categories...
+          Failed to load latest meals...
         </Heading>
         <MealCategoriesSkeleton />
       </Box>
@@ -42,22 +41,9 @@ export function HomeMealCategories() {
   return (
     <Box flex={'1'} mt={'8'}>
       <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'}>
-        <Flex alignItems={'center'} gap={'4'}>
-          <Box>
-            <Highlight query={'Meal'} styles={{ color: 'appColor' }}>Meal Categories</Highlight>
-          </Box>
-
-          <Link to={'/mealCategories'}>
-            <IconButton
-              variant={'surface'}
-              color={'appColor'}
-              size={{ base: 'xs', md: 'md' }}
-              rounded={'full'}
-            >
-              <MdNavigateNext />
-            </IconButton>
-          </Link>
-        </Flex>
+        <Highlight query={'Latest'} styles={{ color: 'appColor' }}>
+          Latest Meals
+        </Highlight>
       </Heading>
 
       {isPending ? (
@@ -65,12 +51,12 @@ export function HomeMealCategories() {
       ) : (
         <Box pl={'5'}>
           <HorizontalScrollArea>
-            <For each={data.categories || []}>
-              {(item: categoryType, index: number) => (
+            <For each={data.meals || []}>
+              {(item: mealType, index: number) => (
                 <MealCategoryItem
                   item={item}
                   index={index}
-                  key={`${index}-${item.idCategory}`}
+                  key={`${index}-${item.idMeal}`}
                 />
               )}
             </For>
@@ -82,36 +68,41 @@ export function HomeMealCategories() {
 }
 
 const MealCategoryItem = ({
-                            index,
-                            item,
-                          }: {
-  item: categoryType
+  index,
+  item,
+}: {
+  item: mealType
   index: number
 }) => {
   return (
-    <Link to={`/mealCategories/${item.strCategory}`}>
+    <Link to={`/mealCategories/${item?.strCategory}/${item?.idMeal}`}>
       <Card.Root
         cursor={'pointer'}
-        overflow="hidden"
-        maxW="xs"
-        minW="xs"
+        maxW='xs'
+        minW='xs'
         flexShrink={0}
-        key={`${index}-${item.idCategory}`}
+        overflow='hidden'
+        key={`${index}-${item?.idMeal}`}
         _hover={{ shadow: 'lg' }}
       >
         <Image
-          src={item.strCategoryThumb}
-          alt={`${item.strCategory}-image`}
+          src={item.strMealThumb}
+          alt={`${item.strMeal}-image`}
+          objectFit={'fit'}
           pb={0}
         />
-        <Card.Body gap="2">
-          <Card.Title>{item.strCategory}</Card.Title>
-          <Card.Description>
-            <Text truncate>{item.strCategoryDescription}</Text>
-          </Card.Description>
+        <Card.Body gap='2'>
+          <Card.Title>
+            <Text truncate>{item.strMeal}</Text>
+          </Card.Title>
+          {item?.strInstructions && (
+            <Card.Description>
+              <Text truncate>{item?.strInstructions}</Text>
+            </Card.Description>
+          )}
         </Card.Body>
-        <Card.Footer gap="2" justifyContent={'flex-end'}>
-          <Button variant="outline" _hover={{ bg: 'appColorShade.100' }}>
+        <Card.Footer gap='2' justifyContent={'flex-end'}>
+          <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
             <HiMiniArrowRight />
           </Button>
         </Card.Footer>
@@ -134,9 +125,9 @@ const MealCategoriesSkeleton = () => {
 
 const MealCategoryItemSkeleton = () => {
   return (
-    <Card.Root maxW="xs" overflow={'hidden'}>
+    <Card.Root maxW='xs' overflow={'hidden'}>
       <Skeleton width={'72'} height={'60'} />
-      <Card.Body gap="2">
+      <Card.Body gap='2'>
         <Card.Title>
           <Skeleton height={'5'} width={'100px'} />
         </Card.Title>
@@ -144,8 +135,8 @@ const MealCategoryItemSkeleton = () => {
           <Skeleton height={'5'} width={'80%'} />
         </Card.Description>
       </Card.Body>
-      <Card.Footer gap="2" justifyContent={'flex-end'}>
-        <Button variant="outline">
+      <Card.Footer gap='2' justifyContent={'flex-end'}>
+        <Button variant='outline'>
           <Skeleton height={'2'} width={'4'} />
         </Button>
       </Card.Footer>
@@ -157,13 +148,13 @@ function HorizontalScrollArea({ children }: { children: ReactNode }) {
   return (
     <ScrollArea.Root>
       <ScrollArea.Viewport>
-        <ScrollArea.Content py="4">
-          <Flex gap="4" flexWrap="nowrap">
+        <ScrollArea.Content py='4'>
+          <Flex gap='4' flexWrap='nowrap'>
             {children}
           </Flex>
         </ScrollArea.Content>
       </ScrollArea.Viewport>
-      <ScrollArea.Scrollbar orientation="horizontal" hidden />
+      <ScrollArea.Scrollbar orientation='horizontal' hidden />
       <ScrollArea.Corner />
     </ScrollArea.Root>
   )

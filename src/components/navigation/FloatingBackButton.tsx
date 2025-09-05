@@ -8,20 +8,17 @@ import {
 } from '@chakra-ui/react'
 import { LuArrowLeft, LuArrowUp } from 'react-icons/lu'
 import { GiMeal } from 'react-icons/gi'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 export const FloatingBackButton = ({
   open = true,
-  title,
   currentPage,
-  url,
 }: {
   open?: boolean
-  title: string
   currentPage: string
-  url: string
 }) => {
+  const navigate = useNavigate()
   const [scrollPosition, setScrollPosition] = useState(0)
   const handleScroll = () => {
     const position = window.pageYOffset
@@ -59,12 +56,10 @@ export const FloatingBackButton = ({
               borderColor={'appColor/48'}
               boxShadow={'lg'}
             >
-              <Link to={url}>
-                <Button variant='plain' size='sm'>
-                  <LuArrowLeft />
-                  {title}
-                </Button>
-              </Link>
+              <Button variant='plain' size='sm' onClick={() => navigate(-1)}>
+                <LuArrowLeft />
+                Back
+              </Button>
 
               <ActionBar.Separator />
 
@@ -81,7 +76,7 @@ export const FloatingBackButton = ({
                     onClick={scrollToTop}
                     size={'xs'}
                     variant={'solid'}
-                    color={'appColor'}
+                    color={'white'}
                     borderRadius={'full'}
                   >
                     <LuArrowUp />

@@ -11,6 +11,7 @@ import {
   Card,
   Link,
   Table,
+  Center,
 } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
@@ -39,15 +40,32 @@ export function SingleMeal() {
   if (error || isError || data?.error) {
     return (
       <Box gap={'5'}>
-        <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
-          Failed to load meals by category...
-        </Heading>
-        {/* <MealCategoryGridItemsSkeleton /> */}
+        <Center>
+          <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
+            Failed to load meals by category...
+          </Heading>
+        </Center>
+
+        <Box mt={'8'} gap={'10'} mx={'auto'} maxW={'4xl'}>
+          <HeadingSkeleton />
+
+          <Flex
+            flexDirection={['column', 'column', 'column', 'column', 'row']}
+            alignItems={['center', 'center', 'center', 'center', 'flex-start']}
+            gap={['6', '6', '6', '6', '3']}
+            my={'10'}
+            mx={'auto'}
+            maxW={'4xl'}
+          >
+            <MealImageSkeleton />
+            <Flex flexDirection={'column'} gap={'2'}>
+              <MealContentSkeleton />
+            </Flex>
+          </Flex>
+        </Box>
 
         <FloatingBackButton
-          title={`${params.c}`}
           currentPage={`${data?.meals?.[0]?.strMeal || 'Current Page'}`}
-          url={`/mealCategories/${params.c}`}
         />
       </Box>
     )
@@ -148,9 +166,7 @@ export function SingleMeal() {
       </Flex>
 
       <FloatingBackButton
-        title={`${data?.meals?.[0]?.strCategory || 'Previous Page'}`}
         currentPage={`${data?.meals?.[0]?.strMeal || 'Current Page'}`}
-        url={`/mealCategories/${params.c}`}
       />
     </Box>
   )
@@ -160,11 +176,6 @@ const HeadingSkeleton = () => {
   return (
     <Stack flexDirection={'column'} alignItems={'center'} gap={'4'}>
       <Skeleton height={'10'} width={'40%'} />
-      <Flex alignItems={'center'} gap={'4'}>
-        <Skeleton height={'8'} width={'20'} />
-        <Skeleton height={'8'} width={'20'} />
-        <Skeleton height={'8'} width={'20'} />
-      </Flex>
     </Stack>
   )
 }
@@ -220,7 +231,7 @@ const MealImage = ({
       alt={`meal-${imageTitle}-image`}
       src={`${imageUrl}`}
       borderRadius={'lg'}
-      width={{ base: 'sm', md: 'lg' }}
+      minWidth={{ base: 'sm', md: 'lg' }}
     />
   )
 }
@@ -234,6 +245,8 @@ const CardItem = ({
   icon?: ReactNode
   children: ReactNode
 }) => {
+  // TODO: implement a popover for each card item that needs a popover.
+
   return (
     <Card.Root
       size={{ base: 'sm', md: 'lg' }}
@@ -255,25 +268,31 @@ const CardItem = ({
 
 const MealContentSkeleton = () => {
   return (
-    <For each={[1, 2, 3]}>
-      {(_, index: number) => (
-        <Card.Root
-          size={{ base: 'sm', md: 'lg' }}
-          maxW={{ base: 'xl', md: '4xl' }}
-          key={`${index}`}
-        >
-          <Card.Header>
-            <Flex alignItems={'center'} gap={'2'}>
-              <Skeleton height={'8'} width={'8'} />
-              <Skeleton height={'10'} width={'72'} />
-            </Flex>
-          </Card.Header>
-          <Card.Body color='fg.muted'>
-            <Skeleton height={'20'} width={'full'} />
-          </Card.Body>
-        </Card.Root>
-      )}
-    </For>
+    <>
+      <Flex gap='4' flexWrap='nowrap'>
+        <Skeleton height={'10'} width={'32'} />
+        <Skeleton height={'10'} width={'32'} />
+      </Flex>
+      <For each={[1, 2, 3]}>
+        {(_, index: number) => (
+          <Card.Root
+            size={{ base: 'sm', md: 'lg' }}
+            maxW={{ base: 'xl', md: '4xl' }}
+            key={`${index}`}
+          >
+            <Card.Header>
+              <Flex alignItems={'center'} gap={'2'}>
+                <Skeleton height={'8'} width={'8'} />
+                <Skeleton height={'10'} width={'72'} />
+              </Flex>
+            </Card.Header>
+            <Card.Body color='fg.muted'>
+              <Skeleton height={'20'} width={'full'} />
+            </Card.Body>
+          </Card.Root>
+        )}
+      </For>
+    </>
   )
 }
 

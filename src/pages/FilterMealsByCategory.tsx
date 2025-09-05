@@ -41,9 +41,7 @@ export const FilterMealsByCategory = () => {
         <MealCategoryGridItemsSkeleton />
 
         <FloatingBackButton
-          title='Categories'
           currentPage={`${params.c || ''}`}
-          url='/mealCategories'
         />
       </Box>
     )
@@ -86,18 +84,16 @@ export const FilterMealsByCategory = () => {
       )}
 
       <FloatingBackButton
-        title='Categories'
         currentPage={`${params.c || ''}`}
-        url='/mealCategories'
       />
     </Box>
   )
 }
 
 const MealCategoryGridItem = ({
-  index,
-  item,
-}: {
+                                index,
+                                item,
+                              }: {
   item: mealType
   index: number
 }) => {
@@ -106,15 +102,15 @@ const MealCategoryGridItem = ({
   return (
     <Link to={`/mealCategories/${params.c}/${item.idMeal}`}>
       <Card.Root
-        overflow='hidden'
+        overflow="hidden"
         key={`${index}-${item.idMeal}`}
         _hover={{ shadow: 'lg' }}
       >
         <Image src={item.strMealThumb} alt={`${item.strMeal}-image`} pb={0} />
-        <Card.Body gap='2'>
+        <Card.Body gap="2">
           <Card.Title>{item.strMeal}</Card.Title>
         </Card.Body>
-        <Card.Footer gap='2' justifyContent={'space-between'}>
+        <Card.Footer gap="2" justifyContent={'space-between'}>
           <Badge
             variant={'outline'}
             color={'appColor'}
@@ -124,7 +120,7 @@ const MealCategoryGridItem = ({
             {params.c}
           </Badge>
 
-          <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
+          <Button variant="outline" _hover={{ bg: 'appColorShade.100' }}>
             <HiMiniArrowRight />
           </Button>
         </Card.Footer>
@@ -147,7 +143,7 @@ const MealCategoryGridItemSkeleton = () => {
   return (
     <Card.Root overflow={'hidden'}>
       <Skeleton width={'full'} height={'60'} />
-      <Card.Body gap='2'>
+      <Card.Body gap="2">
         <Card.Title>
           <Skeleton height={'5'} width={'100px'} />
         </Card.Title>
@@ -155,8 +151,8 @@ const MealCategoryGridItemSkeleton = () => {
           <Skeleton height={'5'} width={'80%'} />
         </Card.Description>
       </Card.Body>
-      <Card.Footer gap='2' justifyContent={'flex-end'}>
-        <Button variant='outline'>
+      <Card.Footer gap="2" justifyContent={'flex-end'}>
+        <Button variant="outline">
           <Skeleton height={'2'} width={'4'} />
         </Button>
       </Card.Footer>
