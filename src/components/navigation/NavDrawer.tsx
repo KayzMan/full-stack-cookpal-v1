@@ -1,6 +1,6 @@
-import { useLocation, Link } from 'react-router-dom';
-import type React from 'react';
-import type { ReactNode } from 'react';
+import { useLocation, Link } from 'react-router-dom'
+import type React from 'react'
+import type { ReactNode } from 'react'
 import {
   Button,
   CloseButton,
@@ -8,13 +8,13 @@ import {
   Kbd,
   Portal,
   Stack,
-} from '@chakra-ui/react';
-import { RiBarChartHorizontalLine } from 'react-icons/ri';
-import { GrHomeRounded } from 'react-icons/gr';
-import { GiKnifeFork } from 'react-icons/gi';
-import { TbCategory } from 'react-icons/tb';
+} from '@chakra-ui/react'
+import { RiBarChartHorizontalLine } from 'react-icons/ri'
+import { GrHomeRounded } from 'react-icons/gr'
+import { GiKnifeFork } from 'react-icons/gi'
+import { TbCategory } from 'react-icons/tb'
 
-import { Logo } from '../Logo';
+import { Logo } from '../Logo'
 
 export function NavDrawer() {
   return (
@@ -38,13 +38,13 @@ export function NavDrawer() {
         </Stack>
       </Drawer.Body>
     </TheDrawer>
-  );
+  )
 }
 
 function TheDrawer({ children }: { children: ReactNode }) {
   return (
     <Drawer.Root placement={{ mdDown: 'bottom', md: 'end' }}>
-      <Drawer.Trigger asChild>
+      <Drawer.Trigger asChild cursor={'pointer'}>
         <RiBarChartHorizontalLine size={'1.3em'} />
       </Drawer.Trigger>
       <Portal>
@@ -76,7 +76,7 @@ function TheDrawer({ children }: { children: ReactNode }) {
         </Drawer.Positioner>
       </Portal>
     </Drawer.Root>
-  );
+  )
 }
 
 function DrawerButton({
@@ -84,12 +84,12 @@ function DrawerButton({
   title,
   icon,
 }: {
-  url: string;
-  title: string;
-  icon: React.JSX.Element;
+  url: string
+  title: string
+  icon: React.JSX.Element
 }) {
-  const location = useLocation();
-  const urlEqualToCurrentPage = url == location.pathname;
+  const location = useLocation()
+  const urlEqualToCurrentPage = url == location.pathname
 
   return (
     <Link to={url}>
@@ -104,5 +104,5 @@ function DrawerButton({
         {title}
       </Button>
     </Link>
-  );
+  )
 }

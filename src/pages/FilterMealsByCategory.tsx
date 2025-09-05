@@ -10,13 +10,12 @@ import {
   Center,
   Flex,
   Badge,
-  Highlight,
   Text,
 } from '@chakra-ui/react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { HiMiniArrowRight } from 'react-icons/hi2'
-import { GiKnifeFork } from 'react-icons/gi'
+import { GiMeal } from 'react-icons/gi'
 import { FloatingBackButton } from '@/components/navigation/FloatingBackButton'
 
 import type { mealType } from '@/lib/types'
@@ -34,7 +33,6 @@ export const FilterMealsByCategory = () => {
   })
 
   if (error || isError || data?.error) {
-    console.log(data?.error, isError, error?.message, error?.name, error?.cause)
     return (
       <Box gap={'5'}>
         <Heading as={'h1'} fontSize={'xl'} color={'orangered'}>
@@ -42,7 +40,11 @@ export const FilterMealsByCategory = () => {
         </Heading>
         <MealCategoryGridItemsSkeleton />
 
-        <FloatingBackButton title='Back to Categories' url='/mealCategories' />
+        <FloatingBackButton
+          title='Categories'
+          currentPage={`${params.c || ''}`}
+          url='/mealCategories'
+        />
       </Box>
     )
   }
@@ -50,14 +52,16 @@ export const FilterMealsByCategory = () => {
   return (
     <Box mt={'8'} gap={'10'}>
       {/* heading */}
-      <Center mb={'12'}>
-        <Heading as={'h1'} fontSize={{ base: '2xl', md: '5xl' }}>
-          <Flex alignItems={'center'} color={'appColor'} gap={'2'}>
-            <Highlight query={'Meals,'} styles={{ color: 'ButtonText' }}>
-              Meals,
-            </Highlight>
-
-            <Text>
+      <Center
+        mb={'12'}
+        position={{ base: 'relative', lg: 'sticky' }}
+        top={{ base: 0, lg: '6' }}
+        zIndex={{ base: 0, lg: '1000' }}
+      >
+        <Heading as={'h1'} fontSize={{ base: '2xl', md: '4xl' }}>
+          <Flex alignItems={'center'} gap={'2'}>
+            <Text>Meals,</Text>
+            <Text color={'appColor'}>
               {'by '}
               {params.c || ''}
             </Text>
@@ -81,7 +85,11 @@ export const FilterMealsByCategory = () => {
         </SimpleGrid>
       )}
 
-      <FloatingBackButton title='Back to Categories' url='/mealCategories' />
+      <FloatingBackButton
+        title='Categories'
+        currentPage={`${params.c || ''}`}
+        url='/mealCategories'
+      />
     </Box>
   )
 }
@@ -96,27 +104,32 @@ const MealCategoryGridItem = ({
   const params = useParams()
 
   return (
-    <Card.Root
-      cursor={'pointer'}
-      overflow='hidden'
-      key={`${index}-${item.idMeal}`}
-      _hover={{ shadow: 'lg' }}
-    >
-      <Image src={item.strMealThumb} alt={`${item.strMeal}-image`} pb={0} />
-      <Card.Body gap='2'>
-        <Card.Title>{item.strMeal}</Card.Title>
-      </Card.Body>
-      <Card.Footer gap='2' justifyContent={'space-between'}>
-        <Badge variant={'solid'} color={'appColor'} size={'md'}>
-          <GiKnifeFork />
-          {params.c}
-        </Badge>
+    <Link to={`/mealCategories/${params.c}/${item.idMeal}`}>
+      <Card.Root
+        overflow='hidden'
+        key={`${index}-${item.idMeal}`}
+        _hover={{ shadow: 'lg' }}
+      >
+        <Image src={item.strMealThumb} alt={`${item.strMeal}-image`} pb={0} />
+        <Card.Body gap='2'>
+          <Card.Title>{item.strMeal}</Card.Title>
+        </Card.Body>
+        <Card.Footer gap='2' justifyContent={'space-between'}>
+          <Badge
+            variant={'outline'}
+            color={'appColor'}
+            size={{ base: 'md', md: 'lg' }}
+          >
+            <GiMeal />
+            {params.c}
+          </Badge>
 
-        <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
-          <HiMiniArrowRight />
-        </Button>
-      </Card.Footer>
-    </Card.Root>
+          <Button variant='outline' _hover={{ bg: 'appColorShade.100' }}>
+            <HiMiniArrowRight />
+          </Button>
+        </Card.Footer>
+      </Card.Root>
+    </Link>
   )
 }
 

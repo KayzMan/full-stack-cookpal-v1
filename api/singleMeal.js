@@ -5,15 +5,15 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API_KEY is not set.' })
   }
 
-  if (!req?.query?.c) {
-    return res.status(500).json({ error: 'Failed to fetch resources' })
+  if (!req?.query?.i) {
+    return res.status(500).json({ error: 'Failed to fetch resource' })
   }
 
-  const { c } = req.query
+  const { i } = req.query
 
   try {
     const result = await fetch(
-      `https://www.themealdb.com/api/json/${API_KEY}/filter.php?c=${c}`,
+      `https://www.themealdb.com/api/json/${API_KEY}/lookup.php?i=${i}`,
     )
     if (!result.ok) {
       throw new Error('Failed to fetch data from TheMealDB API')
@@ -22,8 +22,6 @@ export default async function handler(req, res) {
     return res.status(200).json(data)
   } catch (error) {
     console.error('API call failed:', error)
-    return res
-      .status(500)
-      .json({ error: 'Failed to retrieve meal categories.' })
+    return res.status(500).json({ error: 'Failed to retrieve single meal.' })
   }
 }

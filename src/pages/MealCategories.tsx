@@ -12,7 +12,7 @@ import {
   Text,
   For,
 } from '@chakra-ui/react'
-import { GiKnifeFork } from 'react-icons/gi'
+import { GiMeal } from 'react-icons/gi'
 import { HiMiniArrowRight } from 'react-icons/hi2'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
@@ -38,7 +38,11 @@ export function MealCategories() {
         </Heading>
         <MealCategoryGridItemsSkeleton />
 
-        <FloatingBackButton title='Back Home' url='/' />
+        <FloatingBackButton
+          title='Home'
+          currentPage='Meal Categories'
+          url='/'
+        />
       </Box>
     )
   }
@@ -49,7 +53,7 @@ export function MealCategories() {
       <Center mb={'10'}>
         <Heading as={'h1'} fontSize={{ base: '2xl', md: '5xl' }}>
           <Flex alignItems={'center'} gap={'1'} color={'appColor'}>
-            <GiKnifeFork style={{ marginRight: '0.5em' }} />
+            <GiMeal style={{ marginRight: '0.5em' }} />
             <Highlight query={'Meal'} styles={{ color: 'ButtonText' }}>
               Meal Categories
             </Highlight>
@@ -73,7 +77,7 @@ export function MealCategories() {
         </SimpleGrid>
       )}
 
-      <FloatingBackButton title='Back Home' url='/' />
+      <FloatingBackButton title='Home' currentPage='Meal Categories' url='/' />
     </Box>
   )
 }
