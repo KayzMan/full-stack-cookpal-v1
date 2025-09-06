@@ -11,7 +11,7 @@ export const HomeMealCategories = () => {
       endpoint='/api/mealCategories'
       fetchErrorText='Failed to fetch meal categories...'
       queryKey='allCategories'
-      type='category'
+      type='categories'
     />
   )
 }

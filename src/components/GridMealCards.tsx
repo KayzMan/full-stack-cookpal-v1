@@ -55,16 +55,6 @@ export const GridMealCards = (props: GridMealCardsProps) => {
                   index={index}
                   key={`${index}-${item.idCategory}`}
                   url={`/mealCategories/${item.strCategory}`}
-                  cardFooterLeftView={
-                    <Badge
-                      variant={'outline'}
-                      color={'appColor'}
-                      size={{ base: 'md', md: 'lg' }}
-                    >
-                      <GiMeal />
-                      {props.categoryText}
-                    </Badge>
-                  }
                 />
               )}
             </For>
@@ -76,6 +66,16 @@ export const GridMealCards = (props: GridMealCardsProps) => {
                   index={index}
                   key={`${index}-${item.idMeal}`}
                   url={`/mealCategories/${props.categoryText}/${item.idMeal}`}
+                  cardFooterLeftView={
+                    <Badge
+                      variant={'outline'}
+                      color={'appColor'}
+                      size={{ base: 'md', md: 'lg' }}
+                    >
+                      <GiMeal />
+                      {props.categoryText}
+                    </Badge>
+                  }
                 />
               )}
             </For>

@@ -2,14 +2,14 @@ import { Heading, Highlight } from '@chakra-ui/react'
 
 import { HomeMealCard } from './HomeMealCard'
 
-export const HomeLatestMeals = () => {
+export const HomeRandomMeals = () => {
   return (
     <HomeMealCard
       TheHeading={TheHeading}
-      endpoint='/api/latestMeals'
-      fetchErrorText='Failed to load latest meals..'
-      queryKey='latestMealsByCategory'
-      type='latestMeals'
+      endpoint='/api/randomMeals'
+      fetchErrorText='Failed to load random meals..'
+      queryKey='randomMeals'
+      type='randomMeals'
     />
   )
 }
@@ -17,8 +17,8 @@ export const HomeLatestMeals = () => {
 const TheHeading = () => {
   return (
     <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'}>
-      <Highlight query={'Latest'} styles={{ color: 'appColor' }}>
-        Latest Meals
+      <Highlight query={'Random'} styles={{ color: 'appColor' }}>
+        Random Meals
       </Highlight>
     </Heading>
   )

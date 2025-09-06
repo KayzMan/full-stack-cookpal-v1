@@ -11,7 +11,7 @@ import { HorizontalScrollArea } from '../HorizontalScrollArea'
 import { HomeMealCardSkeleton } from '@/_skeletons/HomeMealCardSkeleton'
 import type React from 'react'
 
-type ItemType = 'category' | 'meal'
+type ItemType = 'categories' | 'latestMeals' | 'randomMeals'
 
 interface HomeMealCardProps {
   fetchErrorText: string
@@ -44,7 +44,7 @@ export function HomeMealCard(props: HomeMealCardProps) {
       ) : (
         <Box pl={'5'}>
           <HorizontalScrollArea>
-            {props.type == 'category' ? (
+            {props.type == 'categories' ? (
               <For each={data.categories || []}>
                 {(item: categoryType, index: number) => {
                   return (
@@ -57,7 +57,7 @@ export function HomeMealCard(props: HomeMealCardProps) {
                   )
                 }}
               </For>
-            ) : props.type === 'meal' ? (
+            ) : props.type === 'randomMeals' || props.type === 'latestMeals' ? (
               <For each={data.meals || []}>
                 {(item: mealType, index: number) => {
                   return (
