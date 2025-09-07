@@ -18,7 +18,7 @@ export const HomeMealCategories = () => {
 
 const TheHeading = () => {
   return (
-    <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'}>
+    <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'} px={'8'}>
       <Flex alignItems={'center'} gap={'4'}>
         <Box>
           <Highlight query={'Meal'} styles={{ color: 'appColor' }}>

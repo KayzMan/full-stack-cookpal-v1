@@ -8,7 +8,6 @@ const config = defineConfig({
       bg: 'bg-canvas',
     },
     body: {
-      // padding: '8',
       paddingBottom: '48',
     },
   },

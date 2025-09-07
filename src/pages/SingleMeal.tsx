@@ -11,7 +11,6 @@ import {
   Card,
   Link,
   Table,
-  Center,
 } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 import { GiMeal } from 'react-icons/gi'
@@ -26,6 +25,7 @@ import { useFetchData } from '@/hooks/useFetchData'
 import { FloatingBackButton } from '@/components/navigation/FloatingBackButton'
 import { ReadMoreText } from '@/components/ReadMore'
 import { FetchErrorView } from '@/components/FetchErrorView'
+import { TransparentHeading } from '@/components/TransparentHeading'
 
 export function SingleMeal() {
   const params = useParams()
@@ -38,7 +38,7 @@ export function SingleMeal() {
 
   if (error || isError || data?.error) {
     return (
-      <FetchErrorView headingText='Failed to load meals by category...'>
+      <FetchErrorView headingText='Failed to load single meal...'>
         <Box mt={'8'} gap={'10'} mx={'auto'} maxW={'4xl'}>
           <HeadingSkeleton />
 
@@ -65,55 +65,60 @@ export function SingleMeal() {
   }
 
   return (
-    <Box mt={'8'} gap={'10'} mx={'auto'} maxW={'4xl'}>
-      {isPending ? <HeadingSkeleton /> : <MealHeading data={data} />}
+    <Box>
+      {isPending ? (
+        <HeadingSkeleton />
+      ) : (
+        <TransparentHeading>{data?.meals?.[0]?.strMeal}</TransparentHeading>
+      )}
 
-      {/* meal content */}
-      <Flex
-        flexDirection={['column', 'column', 'column', 'column', 'row']}
-        alignItems={['center', 'center', 'center', 'center', 'flex-start']}
-        gap={['6', '6', '6', '6', '3']}
-        my={'10'}
-        mx={'auto'}
-        maxW={'4xl'}
-      >
-        {/* meal image */}
-        {isPending ? (
-          <MealImageSkeleton />
-        ) : (
-          <MealImage
-            imageTitle={params.i || 'food'}
-            imageUrl={data?.meals?.[0]?.strMealThumb}
-          />
-        )}
-
-        <Flex flexDirection={'column'} gap={'2'}>
+      <Box mt={'8'} px={'8'} gap={'10'} mx={'auto'} maxW={'6xl'}>
+        {/* meal content */}
+        <Flex
+          flexDirection={['column', 'column', 'column', 'column', 'row']}
+          alignItems={['center', 'center', 'center', 'center', 'flex-start']}
+          gap={['6', '6', '6', '6', '3']}
+          my={'10'}
+          mx={'auto'}
+        >
+          {/* meal image */}
           {isPending ? (
-            <MealContentSkeleton />
+            <MealImageSkeleton />
           ) : (
-            <>
-              {/* badges */}
-              <Badges data={data} />
-
-              {/* Youtube */}
-              <YouTubeCard data={data} />
-
-              {/* sources */}
-              <SourceCard data={data} />
-
-              {/* ingredients */}
-              <IngredientsCard data={data} />
-
-              {/* instructions */}
-              <InstructionsCard data={data} />
-            </>
+            <MealImage
+              imageTitle={params.i || 'food'}
+              imageUrl={data?.meals?.[0]?.strMealThumb}
+            />
           )}
-        </Flex>
-      </Flex>
 
-      <FloatingBackButton
-        currentPage={`${data?.meals?.[0]?.strMeal || 'Current Page'}`}
-      />
+          <Stack gap={'2'}>
+            {isPending ? (
+              <MealContentSkeleton />
+            ) : (
+              <>
+                {/* badges */}
+                <Badges data={data} />
+
+                {/* Youtube */}
+                <YouTubeCard data={data} />
+
+                {/* sources */}
+                <SourceCard data={data} />
+
+                {/* ingredients */}
+                <IngredientsCard data={data} />
+
+                {/* instructions */}
+                <InstructionsCard data={data} />
+              </>
+            )}
+          </Stack>
+        </Flex>
+
+        <FloatingBackButton
+          currentPage={`${data?.meals?.[0]?.strMeal || 'Current Page'}`}
+        />
+      </Box>
     </Box>
   )
 }
@@ -123,40 +128,6 @@ const HeadingSkeleton = () => {
     <Stack flexDirection={'column'} alignItems={'center'} gap={'4'}>
       <Skeleton height={'10'} width={'40%'} />
     </Stack>
-  )
-}
-
-const MealHeading = ({
-  data,
-}: {
-  data: {
-    meals: {
-      strMeal: string
-      strCategory: string
-      strTags: string
-      strArea: string
-    }[]
-  }
-}) => {
-  return (
-    <Center
-      mb={'12'}
-      position={{ base: 'relative', lg: 'sticky' }}
-      top={{ base: 0, lg: '6' }}
-      zIndex={{ base: 0, lg: '1000' }}
-    >
-      <Heading
-        as={'h1'}
-        fontSize={{ base: '2xl', md: '4xl' }}
-        textAlign={'center'}
-        color={'appColor'}
-        position={{ base: 'relative', lg: 'sticky' }}
-        top={{ base: 0, lg: '6' }}
-        zIndex={{ base: 0, lg: 'sticky' }}
-      >
-        {data?.meals?.[0]?.strMeal}
-      </Heading>
-    </Center>
   )
 }
 
@@ -199,13 +170,7 @@ const CardItem = ({
   // TODO: implement a popover for each card item that needs a popover.
 
   return (
-    <Card.Root
-      size={{ base: 'sm', md: 'lg' }}
-      //   maxW={{ base: 'xl', md: '4xl' }}
-      maxW={['xl', 'xl', 'xl', '4xl']}
-      //   minW={{ base: 'sm', md: 'md' }}
-      //   minWidth={['xs', 'sm', 'sm', 'lg']}
-    >
+    <Card.Root size={{ base: 'sm', md: 'lg' }} flex={1}>
       <Card.Header>
         <Flex alignItems={'center'} gap={'2'}>
           {icon && icon}
@@ -359,7 +324,7 @@ const Badges = ({
   data: { meals: { strArea: string; strCategory: string; strTags: string }[] }
 }) => {
   return (
-    <ScrollArea.Root mx={'auto'}>
+    <ScrollArea.Root mb={{ base: '2', md: 0 }} maxW={{ base: 'sm', md: '6xl' }}>
       <ScrollArea.Viewport>
         <ScrollArea.Content pb='1'>
           <Flex gap='4' flexWrap='nowrap'>

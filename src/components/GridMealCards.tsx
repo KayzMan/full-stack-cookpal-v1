@@ -40,7 +40,7 @@ export const GridMealCards = (props: GridMealCardsProps) => {
   }
 
   return (
-    <Box mt={'8'} gap={'10'}>
+    <Box gap={'10'} px={'8'}>
       <props.TheHeading />
 
       {isPending ? (

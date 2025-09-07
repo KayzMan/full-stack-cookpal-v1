@@ -16,7 +16,7 @@ export const HomeRandomMeals = () => {
 
 const TheHeading = () => {
   return (
-    <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'}>
+    <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'} px={'8'}>
       <Highlight query={'Random'} styles={{ color: 'appColor' }}>
         Random Meals
       </Highlight>

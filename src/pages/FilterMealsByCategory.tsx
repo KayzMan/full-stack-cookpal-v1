@@ -1,6 +1,7 @@
-import { Center, Flex, Heading, Text } from '@chakra-ui/react'
+import { Flex, Text } from '@chakra-ui/react'
 import { GridMealCards } from '@/components/GridMealCards'
 import { useParams } from 'react-router-dom'
+import { TransparentHeading } from '@/components/TransparentHeading'
 
 export const FilterMealsByCategory = () => {
   const params = useParams()
@@ -21,21 +22,14 @@ export const FilterMealsByCategory = () => {
 
 const TheHeading = ({ params }: { params: { c?: string } }) => {
   return (
-    <Center
-      mb={'12'}
-      position={{ base: 'relative', lg: 'sticky' }}
-      top={{ base: 0, lg: '6' }}
-      zIndex={{ base: 0, lg: '1000' }}
-    >
-      <Heading as={'h1'} fontSize={{ base: '2xl', md: '4xl' }}>
-        <Flex alignItems={'center'} gap={'2'}>
-          <Text>Meals,</Text>
-          <Text color={'appColor'}>
-            {'by '}
-            {params.c || ''}
-          </Text>
-        </Flex>
-      </Heading>
-    </Center>
+    <TransparentHeading>
+      <Flex alignItems={'center'} gap={'2'}>
+        <Text>Meals,</Text>
+        <Text color={'appColor'}>
+          {'by '}
+          {params.c || ''}
+        </Text>
+      </Flex>
+    </TransparentHeading>
   )
 }

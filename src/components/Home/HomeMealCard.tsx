@@ -42,7 +42,7 @@ export function HomeMealCard(props: HomeMealCardProps) {
       {isPending ? (
         <HomeMealCardSkeleton />
       ) : (
-        <Box pl={'5'}>
+        <Box pl={0}>
           <HorizontalScrollArea>
             {props.type == 'categories' ? (
               <For each={data.categories || []}>

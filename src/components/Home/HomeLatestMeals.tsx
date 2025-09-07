@@ -16,7 +16,7 @@ export const HomeLatestMeals = () => {
 
 const TheHeading = () => {
   return (
-    <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'}>
+    <Heading as={'h1'} fontSize={{ base: 'xl', md: '3xl' }} mb={'4'} px={'8'}>
       <Highlight query={'Latest'} styles={{ color: 'appColor' }}>
         Latest Meals
       </Highlight>

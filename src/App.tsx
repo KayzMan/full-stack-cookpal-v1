@@ -1,10 +1,9 @@
-import { Box, Separator } from '@chakra-ui/react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import { routes } from './lib/routes'
 
 // components...
-import { NavBar } from './components/navigation/NavBar'
+import { SidebarWithHeader } from './components/navigation/SideBar'
 
 // pages...
 import { Home } from './pages/Home'
@@ -15,10 +14,7 @@ import { SingleMeal } from './pages/SingleMeal'
 export function App() {
   return (
     <BrowserRouter>
-      <NavBar />
-
-      <Box px={'8'}>
-        <Separator mb={'4'} />
+      <SidebarWithHeader>
         <Routes>
           <Route path={routes.home} id='home' element={<Home />} />
           <Route
@@ -37,7 +33,7 @@ export function App() {
             element={<SingleMeal />}
           />
         </Routes>
-      </Box>
+      </SidebarWithHeader>
     </BrowserRouter>
   )
 }

@@ -5,7 +5,7 @@ export const HorizontalScrollArea = ({ children }: { children: ReactNode }) => {
   return (
     <ScrollArea.Root>
       <ScrollArea.Viewport>
-        <ScrollArea.Content py='4'>
+        <ScrollArea.Content py='4' px={'8'}>
           <Flex gap='4' flexWrap='nowrap'>
             {children}
           </Flex>
