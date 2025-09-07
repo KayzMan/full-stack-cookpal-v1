@@ -21,7 +21,7 @@ interface HomeMealCardProps {
   TheHeading: () => React.JSX.Element
 }
 
-export function HomeMealCard(props: HomeMealCardProps) {
+export function HorizontalScrollMealCard(props: HomeMealCardProps) {
   const { isPending, data, error, isError } = useFetchData({
     queryKey: props.queryKey,
     endpoint: props.endpoint,

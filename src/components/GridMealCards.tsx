@@ -1,5 +1,5 @@
 import { Box, SimpleGrid, For, Badge } from '@chakra-ui/react'
-import { GiMeal } from 'react-icons/gi'
+import { MdOutlineFastfood } from 'react-icons/md'
 
 import { FloatingBackButton } from '@/components/navigation/FloatingBackButton'
 import { FetchErrorView } from '@/components/FetchErrorView'
@@ -46,7 +46,7 @@ export const GridMealCards = (props: GridMealCardsProps) => {
       {isPending ? (
         <MealCardSkeleton />
       ) : (
-        <SimpleGrid columns={[1, 1, 2, 3, 3, 4]} gap={'4'}>
+        <SimpleGrid columns={[1, 1, 2, 2, 3, 3]} gap={'4'}>
           {props.type == 'mealCategories' ? (
             <For each={data.categories || []}>
               {(item: categoryType, index: number) => (
@@ -72,7 +72,7 @@ export const GridMealCards = (props: GridMealCardsProps) => {
                       color={'appColor'}
                       size={{ base: 'md', md: 'lg' }}
                     >
-                      <GiMeal />
+                      <MdOutlineFastfood />
                       {props.categoryText}
                     </Badge>
                   }

@@ -6,4 +6,5 @@ export const routes = {
   randomMeals: '/randomMeals',
   filterMealByCategory: '/mealCategories/:c',
   singleMeal: '/mealCategories/:c/:i',
+  about: '/about',
 }

@@ -14,14 +14,15 @@ import {
   FiHome,
   FiMenu,
   FiSearch,
-  FiGrid,
   FiZap,
   FiShuffle,
+  FiAlertCircle,
 } from 'react-icons/fi'
+import { MdOutlineFastfood } from 'react-icons/md'
 import type { BoxProps, FlexProps } from '@chakra-ui/react'
 import type { IconType } from 'react-icons'
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ColorModeButton } from '../ui/color-mode'
 
 import { Logo } from '../Logo'
@@ -52,8 +53,13 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', url: routes.home, icon: FiHome },
   { name: 'Search', url: routes.search, icon: FiSearch },
   { name: 'Latest Meals', url: routes.latestMeals, icon: FiZap },
-  { name: 'Meal Categories', url: routes.mealCategories, icon: FiGrid },
+  {
+    name: 'Meal Categories',
+    url: routes.mealCategories,
+    icon: MdOutlineFastfood,
+  },
   { name: 'Random Meals', url: routes.randomMeals, icon: FiShuffle },
+  { name: 'About', url: routes.about, icon: FiAlertCircle },
 ]
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -95,6 +101,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 }
 
 const NavItem = ({ icon, url, children, ...rest }: NavItemProps) => {
+  const location = useLocation()
+  const urlEqualToCurrentPage = url == location.pathname
+
   return (
     <Link to={url}>
       <Box style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
@@ -105,8 +114,10 @@ const NavItem = ({ icon, url, children, ...rest }: NavItemProps) => {
           borderRadius='lg'
           role='group'
           cursor='pointer'
+          bg={urlEqualToCurrentPage ? 'appColor' : 'none'}
+          color={urlEqualToCurrentPage ? 'white' : 'none'}
           _hover={{
-            bg: 'appColorShade.200',
+            bg: 'appColor',
             color: 'white',
           }}
           {...rest}
@@ -152,11 +163,19 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         <Logo />
       </Box>
 
-      <ColorModeButton
-        variant={'subtle'}
-        color={'appColor'}
+      <Flex
         display={{ base: 'flex', lg: 'none' }}
-      />
+        gap={'1'}
+        alignItems={'center'}
+      >
+        <Link to={routes.search}>
+          <IconButton variant={'subtle'}>
+            <FiSearch />
+          </IconButton>
+        </Link>
+
+        <ColorModeButton variant={'subtle'} color={'appColor'} />
+      </Flex>
     </Flex>
   )
 }

@@ -1,10 +1,10 @@
 import { Heading, Highlight } from '@chakra-ui/react'
 
-import { HomeMealCard } from './HomeMealCard'
+import { HorizontalScrollMealCard } from './HorizontalScrollMealCard'
 
-export const HomeLatestMeals = () => {
+export const HorizontalScrollLatestMeals = () => {
   return (
-    <HomeMealCard
+    <HorizontalScrollMealCard
       TheHeading={TheHeading}
       endpoint='/api/latestMeals'
       fetchErrorText='Failed to load latest meals..'

@@ -10,6 +10,7 @@ import { Home } from './pages/Home'
 import { MealCategories } from './pages/MealCategories'
 import { FilterMealsByCategory } from './pages/FilterMealsByCategory'
 import { SingleMeal } from './pages/SingleMeal'
+import { SearchPage } from './pages/SearchPage'
 
 export function App() {
   return (
@@ -17,6 +18,7 @@ export function App() {
       <SidebarWithHeader>
         <Routes>
           <Route path={routes.home} id='home' element={<Home />} />
+          <Route path={routes.search} id='search' element={<SearchPage />} />
           <Route
             path={routes.mealCategories}
             id='mealCategories'

@@ -1,10 +1,10 @@
 import { Heading, Highlight } from '@chakra-ui/react'
 
-import { HomeMealCard } from './HomeMealCard'
+import { HorizontalScrollMealCard } from './HorizontalScrollMealCard'
 
-export const HomeRandomMeals = () => {
+export const HorizontalScrollRandomMeals = () => {
   return (
-    <HomeMealCard
+    <HorizontalScrollMealCard
       TheHeading={TheHeading}
       endpoint='/api/randomMeals'
       fetchErrorText='Failed to load random meals..'

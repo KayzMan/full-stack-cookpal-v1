@@ -2,11 +2,11 @@ import { Heading, Flex, Box, Highlight, IconButton } from '@chakra-ui/react'
 import { MdNavigateNext } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 
-import { HomeMealCard } from './HomeMealCard'
+import { HorizontalScrollMealCard } from './HorizontalScrollMealCard'
 
-export const HomeMealCategories = () => {
+export const HorizontalScrollMealCategories = () => {
   return (
-    <HomeMealCard
+    <HorizontalScrollMealCard
       TheHeading={TheHeading}
       endpoint='/api/mealCategories'
       fetchErrorText='Failed to fetch meal categories...'
