@@ -8,41 +8,86 @@ import {
   CloseButton,
   Text,
   HStack,
+  useDisclosure,
+  For,
 } from '@chakra-ui/react'
-import { FiSearch } from 'react-icons/fi'
-import { LuFolder, LuSquareCheck, LuUser } from 'react-icons/lu'
+import { FiCoffee, FiMapPin, FiSearch, FiShoppingCart } from 'react-icons/fi'
+import { MdOutlineFastfood } from 'react-icons/md'
+import { useHotkeys, HotkeysProvider } from 'react-hotkeys-hook'
+import { useIsMac } from '@/hooks/useIsMac'
 
 // components...
-import { HorizontalScrollMealCategories } from '@/components/Home/HorizontalScrollMealCategories'
-import { HorizontalScrollLatestMeals } from '@/components/Home/HorizontalScrollLatestMeals'
-import { HorizontalScrollRandomMeals } from '@/components/Home/HorizontalScrollRandomMeals'
+import { HorizontalScrollMealCategories } from '@/components/HorizontalScrollContent/HorizontalScrollMealCategories'
+import { HorizontalScrollLatestMeals } from '@/components/HorizontalScrollContent/HorizontalScrollLatestMeals'
+import { HorizontalScrollRandomMeals } from '@/components/HorizontalScrollContent/HorizontalScrollRandomMeals'
+
+// search...
+import { SearchMeals } from '@/components/search/SearchMeals'
+import { SearchIngredients } from '@/components/search/SearchIngredients'
+import { SearchCategories } from '@/components/search/SearchCategories'
+import { SearchAreas } from '@/components/search/SearchAreas'
+import type { JSX, ReactNode } from 'react'
+
+interface tabProps {
+  value: string
+  icon: ReactNode
+  title: string
+  contentElement: () => JSX.Element
+}
+
+const tabs: tabProps[] = [
+  {
+    value: 'meals',
+    title: 'Meals',
+    icon: <FiCoffee />,
+    contentElement: SearchMeals,
+  },
+  {
+    value: 'ingredients',
+    title: 'Ingredients',
+    icon: <FiShoppingCart />,
+    contentElement: SearchIngredients,
+  },
+  {
+    value: 'categories',
+    title: 'Categories',
+    icon: <MdOutlineFastfood />,
+    contentElement: SearchCategories,
+  },
+  {
+    value: 'areas',
+    title: 'Areas',
+    icon: <FiMapPin />,
+    contentElement: SearchAreas,
+  },
+]
 
 export const SearchPage = () => {
   return (
-    <>
-      <Flex
-        justifyContent={'flex-end'}
-        px={'4'}
-        onKeyDown={(e) => {
-          console.log('e.key', e.key)
-        }}
-      >
+    <HotkeysProvider>
+      <Flex justifyContent={'flex-end'} px={'4'}>
         <SearchBar />
       </Flex>
 
       <HorizontalScrollLatestMeals />
       <HorizontalScrollMealCategories />
       <HorizontalScrollRandomMeals />
-    </>
+    </HotkeysProvider>
   )
 }
 
 const SearchBar = () => {
+  const { open, setOpen } = useDisclosure()
+  useHotkeys('mod+k', () => setOpen(true))
+
   return (
     <Dialog.Root
+      open={open}
+      onOpenChange={(e) => setOpen(e.open)}
       key={'center-search-dialog'}
       placement={'center'}
       motionPreset='slide-in-bottom'
+      scrollBehavior={'inside'}
     >
       <Dialog.Trigger asChild>
         <Box>
@@ -52,7 +97,11 @@ const SearchBar = () => {
       <Portal>
         <Dialog.Backdrop />
         <Dialog.Positioner>
-          <Dialog.Content>
+          <Dialog.Content
+            // maxWidth={{ base: 'sm', md: 'fit-content' }}
+            width='90%'
+            minWidth={{ base: 'none', md: '2xl', lg: '4xl' }}
+          >
             <Dialog.Header>
               <Dialog.Title>Search</Dialog.Title>
             </Dialog.Header>
@@ -66,7 +115,13 @@ const SearchBar = () => {
               {/* <Button>Save</Button> */}
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
-              <CloseButton size='sm' />
+              <CloseButton
+                size='xs'
+                color={'red'}
+                bg={'red.50'}
+                variant={'subtle'}
+                borderRadius={'full'}
+              />
             </Dialog.CloseTrigger>
           </Dialog.Content>
         </Dialog.Positioner>
@@ -76,6 +131,8 @@ const SearchBar = () => {
 }
 
 const SearchDialogTrigger = () => {
+  const isMac = useIsMac()
+
   return (
     <Flex
       alignItems={'center'}
@@ -99,14 +156,14 @@ const SearchDialogTrigger = () => {
       <HStack>
         <FiSearch />
 
-        <Text>Search for meals, areas...</Text>
+        <Text color={'gray.500'}>Search for meals, areas...</Text>
       </HStack>
 
       <HStack gap={'0.5'}>
-        <Kbd size={'lg'} variant={'raised'}>
-          ⌘
+        <Kbd variant={'raised'} size={'lg'}>
+          {isMac ? '⌘' : 'Ctrl'}
         </Kbd>
-        <Kbd size={'lg'} variant={'raised'}>
+        <Kbd variant={'raised'} size={'lg'}>
           K
         </Kbd>
       </HStack>
@@ -116,37 +173,25 @@ const SearchDialogTrigger = () => {
 
 const SearchViewTabs = () => {
   return (
-    <Tabs.Root lazyMount unmountOnExit defaultValue='members'>
+    <Tabs.Root lazyMount unmountOnExit defaultValue={tabs[0].value}>
       <Tabs.List>
-        {/* first tab */}
-        <Tabs.Trigger value='members'>
-          <LuUser />
-          Members
-        </Tabs.Trigger>
-
-        {/* second tab */}
-        <Tabs.Trigger value='projects'>
-          <LuFolder />
-          Projects
-        </Tabs.Trigger>
-
-        {/* third tab */}
-        <Tabs.Trigger value='tasks'>
-          <LuSquareCheck />
-          Settings
-        </Tabs.Trigger>
+        <For each={tabs}>
+          {(item: tabProps, index: number) => (
+            <Tabs.Trigger value={item.value} outline={'none'} key={`${index}`}>
+              {item.icon}
+              {item.title}
+            </Tabs.Trigger>
+          )}
+        </For>
       </Tabs.List>
 
-      {/* first tab content */}
-      <Tabs.Content value='members'>Manage your team members</Tabs.Content>
-
-      {/* second tab content */}
-      <Tabs.Content value='projects'>Manage your projects</Tabs.Content>
-
-      {/* third tab content */}
-      <Tabs.Content value='tasks'>
-        Manage your tasks for freelancers
-      </Tabs.Content>
+      <For each={tabs}>
+        {(item: tabProps, index: number) => (
+          <Tabs.Content value={item.value} key={`${index}`}>
+            {<item.contentElement />}
+          </Tabs.Content>
+        )}
+      </For>
     </Tabs.Root>
   )
 }

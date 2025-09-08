@@ -11,6 +11,8 @@ import {
   Card,
   Link,
   Table,
+  Button,
+  Text,
 } from '@chakra-ui/react'
 import { useParams } from 'react-router-dom'
 import { GiMeal } from 'react-icons/gi'
@@ -19,13 +21,14 @@ import { CgNotes } from 'react-icons/cg'
 import { LuShoppingCart } from 'react-icons/lu'
 import { VscReferences } from 'react-icons/vsc'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 
 import { useFetchData } from '@/hooks/useFetchData'
 
 import { FloatingBackButton } from '@/components/navigation/FloatingBackButton'
-import { ReadMoreText } from '@/components/ReadMore'
 import { FetchErrorView } from '@/components/FetchErrorView'
 import { TransparentHeading } from '@/components/TransparentHeading'
+import { ReadMoreText } from '@/components/ReadMore'
 
 export function SingleMeal() {
   const params = useParams()
@@ -38,8 +41,18 @@ export function SingleMeal() {
 
   if (error || isError || data?.error) {
     return (
-      <FetchErrorView headingText='Failed to load single meal...'>
-        <Box mt={'8'} gap={'10'} mx={'auto'} maxW={'4xl'}>
+      <FetchErrorView
+        headingText='Failed to load single meal...'
+        headingMarginTop='8'
+        center={true}
+      >
+        <Box
+          mt={'8'}
+          gap={'10'}
+          mx={'auto'}
+          maxW={{ base: 'none', md: '7xl' }}
+          width={'100%'}
+        >
           <HeadingSkeleton />
 
           <Flex
@@ -48,10 +61,16 @@ export function SingleMeal() {
             gap={['6', '6', '6', '6', '3']}
             my={'10'}
             mx={'auto'}
-            maxW={'4xl'}
+            maxW={{ base: 'none', md: '7xl' }}
+            width={'100%'}
           >
             <MealImageSkeleton />
-            <Flex flexDirection={'column'} gap={'2'}>
+            <Flex
+              flexDirection={'column'}
+              gap={'2'}
+              alignItems={'flex-start'}
+              width={'100%'}
+            >
               <MealContentSkeleton />
             </Flex>
           </Flex>
@@ -65,21 +84,30 @@ export function SingleMeal() {
   }
 
   return (
-    <Box>
+    <Box width={'100%'}>
       {isPending ? (
         <HeadingSkeleton />
       ) : (
         <TransparentHeading>{data?.meals?.[0]?.strMeal}</TransparentHeading>
       )}
 
-      <Box mt={'8'} px={'8'} gap={'10'} mx={'auto'} maxW={'6xl'}>
+      <Box
+        mt={'8'}
+        gap={'10'}
+        mx={'auto'}
+        maxW={{ base: 'none', md: '7xl' }}
+        width={'100%'}
+      >
         {/* meal content */}
         <Flex
           flexDirection={['column', 'column', 'column', 'column', 'row']}
           alignItems={['center', 'center', 'center', 'center', 'flex-start']}
           gap={['6', '6', '6', '6', '3']}
           my={'10'}
+          px={'4'}
           mx={'auto'}
+          maxW={{ base: 'none', md: '7xl' }}
+          width={'100%'}
         >
           {/* meal image */}
           {isPending ? (
@@ -91,7 +119,8 @@ export function SingleMeal() {
             />
           )}
 
-          <Stack gap={'2'}>
+          {/* meal data */}
+          <Stack gap={'2'} width={'100%'}>
             {isPending ? (
               <MealContentSkeleton />
             ) : (
@@ -126,7 +155,7 @@ export function SingleMeal() {
 const HeadingSkeleton = () => {
   return (
     <Stack flexDirection={'column'} alignItems={'center'} gap={'4'}>
-      <Skeleton height={'10'} width={'40%'} />
+      <Skeleton height={'10'} width={{ base: '100%', md: '50%' }} />
     </Stack>
   )
 }
@@ -135,7 +164,7 @@ const MealImageSkeleton = () => {
   return (
     <Skeleton
       borderRadius={'lg'}
-      width={{ base: 'sm', md: 'lg' }}
+      width={{ base: '100%', md: 'lg' }}
       height={{ base: 'sm', md: 'lg' }}
     />
   )
@@ -152,6 +181,7 @@ const MealImage = ({
     <Image
       alt={`meal-${imageTitle}-image`}
       src={`${imageUrl}`}
+      objectFit={'cover'}
       borderRadius={'lg'}
       minWidth={{ base: 'sm', md: 'lg' }}
     />
@@ -170,7 +200,11 @@ const CardItem = ({
   // TODO: implement a popover for each card item that needs a popover.
 
   return (
-    <Card.Root size={{ base: 'sm', md: 'lg' }} flex={1}>
+    <Card.Root
+      size={{ base: 'sm', md: 'lg' }}
+      minW={{ base: 'xs', md: 'sm' }}
+      width={'100%'}
+    >
       <Card.Header>
         <Flex alignItems={'center'} gap={'2'}>
           {icon && icon}
@@ -185,7 +219,7 @@ const CardItem = ({
 const MealContentSkeleton = () => {
   return (
     <>
-      <Flex gap='4' flexWrap='nowrap'>
+      <Flex gap='4' flexWrap='nowrap' width={'100%'} alignItems={'flex-start'}>
         <Skeleton height={'10'} width={'32'} />
         <Skeleton height={'10'} width={'32'} />
       </Flex>
@@ -193,15 +227,17 @@ const MealContentSkeleton = () => {
         {(_, index: number) => (
           <Card.Root
             size={{ base: 'sm', md: 'lg' }}
-            maxW={{ base: 'xl', md: '4xl' }}
+            minW={{ base: 'xs', md: 'sm' }}
+            width={'100%'}
             key={`${index}`}
           >
             <Card.Header>
               <Flex alignItems={'center'} gap={'2'}>
                 <Skeleton height={'8'} width={'8'} />
-                <Skeleton height={'10'} width={'72'} />
+                <Skeleton height={'10'} width={'calc(100% - 2.5rem)'} />
               </Flex>
             </Card.Header>
+
             <Card.Body color='fg.muted'>
               <Skeleton height={'20'} width={'full'} />
             </Card.Body>
@@ -248,11 +284,11 @@ const IngredientsCard = ({
         <Table.ScrollArea
           borderWidth='1px'
           rounded='md'
-          maxHeight={{ base: '300px', md: '200px' }}
+          maxHeight={{ base: '200px', md: '300px' }}
         >
           <Table.Root showColumnBorder stickyHeader>
             <Table.Header>
-              <Table.Row bg={'bg.subtle'}>
+              <Table.Row bg={'bg.subtle'} zIndex={0}>
                 <Table.ColumnHeader>Ingredient</Table.ColumnHeader>
                 <Table.ColumnHeader>Measure</Table.ColumnHeader>
               </Table.Row>
@@ -291,12 +327,33 @@ const InstructionsCard = ({
 }: {
   data: { meals: { strInstructions: string }[] }
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const instructions = data?.meals?.[0]?.strInstructions
+  const steps = instructions.split(/(?=\d+\.\s)/)
+
+  const previewSteps = steps.slice(0, 2)
+
   return (
     data?.meals?.[0]?.strInstructions && (
       <CardItem title='Instructions' icon={<CgNotes size={26} />}>
-        <ReadMoreText noOfLines={3}>
-          {data?.meals?.[0]?.strInstructions}
-        </ReadMoreText>
+        {steps.length > 1 ? (
+          <>
+            {(isExpanded ? steps : previewSteps).map((step, index) => (
+              <Text key={index}>{step}</Text>
+            ))}
+
+            <Button
+              size='xs'
+              onClick={() => setIsExpanded(!isExpanded)}
+              mt={'4'}
+              alignSelf={'flex-start'}
+            >
+              {isExpanded ? 'Read less' : 'Read more'}
+            </Button>
+          </>
+        ) : (
+          <ReadMoreText noOfLines={3}>{steps.join()}</ReadMoreText>
+        )}
       </CardItem>
     )
   )
@@ -310,6 +367,7 @@ const SourceCard = ({ data }: { data: { meals: { strSource: string }[] } }) => {
           target='_blank'
           href={`${`${data?.meals?.[0]?.strSource}`}`}
           _hover={{ textDecor: 'underline' }}
+          wordBreak={'break-all'}
         >
           {data?.meals?.[0]?.strSource}
         </Link>

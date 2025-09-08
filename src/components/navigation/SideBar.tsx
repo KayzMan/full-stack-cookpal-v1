@@ -102,7 +102,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
 const NavItem = ({ icon, url, children, ...rest }: NavItemProps) => {
   const location = useLocation()
-  const urlEqualToCurrentPage = url == location.pathname
+  const urlEqualToCurrentPage =
+    url == location.pathname || location.pathname.includes(url)
 
   return (
     <Link to={url}>

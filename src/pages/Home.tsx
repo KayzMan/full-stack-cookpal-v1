@@ -1,19 +1,15 @@
-import { Center, Heading } from '@chakra-ui/react'
-
-// components...
-// import { HorizontalScrollMealCategories } from '@/components/Home/HorizontalScrollMealCategories'
-// import { HorizontalScrollLatestMeals } from '@/components/Home/HorizontalScrollLatestMeals'
-// import { HorizontalScrollRandomMeals } from '@/components/Home/HorizontalScrollRandomMeals'
+import { Box, Flex, Heading, Text } from '@chakra-ui/react'
 
 export const Home = () => {
   return (
-    <>
-      <Center>
-        <Heading as={'h1'}>Home Page!</Heading>
-      </Center>
-      {/* <HorizontalScrollLatestMeals />
-      <HorizontalScrollMealCategories />
-      <HorizontalScrollRandomMeals /> */}
-    </>
+    <Box>
+      <Flex>
+        <Text fontWeight={'medium'} color={'appColor'}>
+          CookPal
+        </Text>
+
+        <Heading>Your Pal to cook delicious meals.</Heading>
+      </Flex>
+    </Box>
   )
 }
